@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 const ItemListContainer = ({ greeting }) => {
   const { categoryId } = useParams();
@@ -10,16 +10,14 @@ const ItemListContainer = ({ greeting }) => {
     const fetchItems = async () => {
       setLoading(true);
 
-      
       const allItems = [
-        { id: "1", category: "ropa", name: "Camiseta" },
-        { id: "2", category: "electronica", name: "Auriculares" },
-        { id: "3", category: "accesorios", name: "Mochila" },
-        { id: "4", category: "ropa", name: "Pantalón" },
-        { id: "5", category: "electronica", name: "Teclado" }
+        { id: "1", category: "ropa", name: "Camiseta", image: "/images/camiseta.jpg" },
+        { id: "2", category: "electronica", name: "Auriculares", image: "/images/auriculares.jpg" },
+        { id: "3", category: "accesorios", name: "Mochila", image: "/images/mochila.jpg" },
+        { id: "4", category: "ropa", name: "Pantalón", image: "/images/pantalon.jpg" },
+        { id: "5", category: "electronica", name: "Teclado", image: "/images/teclado.jpg" }
       ];
 
-      
       const filteredItems = categoryId
         ? allItems.filter(item => item.category === categoryId)
         : allItems;
@@ -33,18 +31,27 @@ const ItemListContainer = ({ greeting }) => {
 
   return (
     <div className="container mt-4">
-      <h2>{greeting}</h2>
+      <h2 className="text-center">{greeting}</h2>
 
       {loading ? (
         <p>Cargando productos...</p>
       ) : items.length > 0 ? (
-        <ul>
+        <div className="row">
           {items.map(item => (
-            <li key={item.id}>{item.name}</li>
+            <div key={item.id} className="col-md-4">
+              <div className="card shadow-sm p-3 mb-3">
+                <Link to={`/item/${item.id}`} className="text-decoration-none text-dark">
+                  <img src={item.image} alt={item.name} className="card-img-top img-fluid" />
+                  <div className="card-body text-center">
+                    <h5>{item.name}</h5>
+                  </div>
+                </Link>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p>No hay productos en esta categoría.</p>
+        <p className="text-center">No hay productos en esta categoría.</p>
       )}
     </div>
   );
